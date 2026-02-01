@@ -58,3 +58,17 @@ class TransactionStorage:
         conn.close()
 
         return dict(transactions_row) if transactions_row else None
+
+    def delete_transaction(self, transaction_id: int) -> bool:
+        """Deletes a transaction using its ID, returns True if deleted and False otherwise."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM transactions WHERE id = ?", (transaction_id,))
+        if_deleted = cursor.rowcount > 0
+
+        conn.commit()
+        conn.close()
+
+        return if_deleted
+
+    
