@@ -71,4 +71,17 @@ class TransactionStorage:
 
         return if_deleted
 
-    
+    def get_balance(self):
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+        SELECT
+            COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END),0)-
+            COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END),0)
+        AS balance
+        FROM transactions
+        """)
+        result = cursor.fetchone()
+        conn.close()
+
+        return result["balance"] if result else 0.0
