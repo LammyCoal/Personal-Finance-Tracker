@@ -28,7 +28,7 @@ class TransactionStorage:
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute("""
-        INSERT INTO transactions (amount, date, description, type_, category)
+        INSERT INTO transactions (amount, date, description, type, category)
         VALUES (?, ?, ?, ?, ?)""", (amount, date, description, type_, category))
 
         conn.commit()
@@ -48,22 +48,22 @@ class TransactionStorage:
 
         return [dict(rows) for rows in transactions_rows]
 
-    def get_transactions_by_id(self, transaction_id: int) -> Optional[Dict[str, Any]]:
+    def get_transactions_by_id(self, tx_id: int) -> Optional[Dict[str, Any]]:
         """ Returns a single transaction matching the given transaction ID or None if not found."""
         conn = self._get_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM transactions WHERE id = ?", (transaction_id,))
+        cursor.execute("SELECT * FROM transactions WHERE id = ?", (tx_id,))
         transactions_row = cursor.fetchone()
         conn.close()
 
         return dict(transactions_row) if transactions_row else None
 
-    def delete_transaction(self, transaction_id: int) -> bool:
+    def delete_transaction(self, tx_id: int) -> bool:
         """Deletes a transaction using its ID, returns True if deleted and False otherwise."""
         conn = self._get_connection()
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM transactions WHERE id = ?", (transaction_id,))
+        cursor.execute("DELETE FROM transactions WHERE id = ?", (tx_id,))
         if_deleted = cursor.rowcount > 0
 
         conn.commit()
@@ -85,3 +85,35 @@ class TransactionStorage:
         conn.close()
 
         return result["balance"] if result else 0.0
+
+if __name__ == "__main__":
+    storage = TransactionStorage()
+
+#Tests
+    #Adding test
+transaction_id = storage.add_transaction(
+    amount=20000.0,
+    date="2026-02-02",
+    description="My last testing transaction on storage",
+    type_="income",
+    category="gift"
+)
+
+print(f"New Transaction with id {transaction_id} added ")
+
+    #Test getting all transactions
+transactions = storage.get_all_transactions()
+print("\n All transactions:")
+for transaction in transactions:
+    print(transaction)
+
+    #Test balance
+print(f"\n Current balance: {storage.get_balance()}")
+
+    #Test getting transactions by id
+transaction = storage.get_transactions_by_id(1)
+print(f"\n Transaction collected: {transaction} ")
+
+    #Test delete from storage
+transaction = storage.delete_transaction(transaction_id)
+print(transaction)
