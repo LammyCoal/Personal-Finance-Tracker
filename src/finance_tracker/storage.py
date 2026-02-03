@@ -93,10 +93,10 @@ if __name__ == "__main__":
     #Adding test
 transaction_id = storage.add_transaction(
     amount=20000.0,
-    date="2026-02-02",
-    description="My last testing transaction on storage",
-    type_="income",
-    category="gift"
+    date="2026-02-03",
+    description="food",
+    type_="expense",
+    category="spendings"
 )
 
 print(f"New Transaction with id {transaction_id} added ")
@@ -115,5 +115,3 @@ transaction = storage.get_transactions_by_id(1)
 print(f"\n Transaction collected: {transaction} ")
 
     #Test delete from storage
-transaction = storage.delete_transaction(transaction_id)
-print(transaction)
