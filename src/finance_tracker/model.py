@@ -1,17 +1,14 @@
-from enum import Enum
-from decimal import Decimal
-from dataclasses import dataclass
+from __future__ import annotations
+from dataclasses import dataclass,field
+from datetime import datetime
+from typing import Optional
+import re
 
-class Category(Enum):
-    FOOD = 'Food'
-    TRANSPORT = 'Transport'
-    UTILITY = 'Utility'
-    RENT = 'Rent'
-    OTHER = 'Other'
-
-@dataclass
+@dataclass(frozen=True)
 class Transaction:
-    title: str
-    amount: float
-    category: Category
-
+    id: Optional[int] = None
+    amount: float = 0.0
+    date: str = ""
+    type: str = "expense"
+    category: Optional[str] = None
+    

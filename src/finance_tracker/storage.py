@@ -96,7 +96,7 @@ transaction_id = storage.add_transaction(
     date="2026-02-03",
     description="food",
     type_="expense",
-    category="spendings"
+    category="spendingszx"
 )
 
 print(f"New Transaction with id {transaction_id} added ")
