@@ -60,4 +60,24 @@ class Transaction:
         def __repr__(self) -> str:
             return f"Transaction(id={self.id}, amount={self.amount}, date='{self.date}', "\
                     f"type='{self.type}', description='{self.description}' category={self.category})"
-            
+
+        @classmethod
+        def create_new(
+                cls,
+                amount: float,
+                date: str,
+                description: str='',
+                type_: str='expense',
+                category: Optional[str] = None,
+        )->Transaction:
+            """Creates a new unsaved transaction mirroring the Transaction class"""
+            return cls(
+                id=None,
+                amount=abs(amount),
+                date=date.strip(),
+                description=description.strip(),
+                type_=type_.lower(),
+                category=category.strip() if category else None,
+                
+
+            )
