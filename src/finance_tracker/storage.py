@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Optional, Any, Dict
 import sqlite3
-
+from .model import Transaction
 DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "finance.db"
 
 class TransactionStorage:
@@ -14,22 +14,23 @@ class TransactionStorage:
         conn.row_factory = sqlite3.Row
         return conn
 
-    def add_transaction(self,
-                        amount:float,
-                        date: str,
-                        description: str= "",
-                        type_: str= "expense",
-                        category: Optional[str] =None) -> int:
-        """Add a transaction to the database.
+    def add_transaction(self,transaction: Transaction) -> int:
+        """Add a transaction to the database, using a Transaction object
             Returns a transaction ID."""
-        if type_ not in ("expense", "income"):
-            raise ValueError("Type must be either expense or income ")
+        if transaction.id is not None:
+            raise ValueError("Cannot add a transaction with an id")
 
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute("""
         INSERT INTO transactions (amount, date, description, type, category)
-        VALUES (?, ?, ?, ?, ?)""", (amount, date, description, type_, category))
+        VALUES (?, ?, ?, ?, ?)""", (
+            transaction.amount,
+            transaction.date,
+            transaction.description,
+            transaction.type,
+            transaction.category
+        ))
 
         conn.commit()
         new_id = cursor.lastrowid
@@ -53,7 +54,7 @@ class TransactionStorage:
         conn = self._get_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM transactions WHERE id = ?", (tx_id,x))
+        cursor.execute("SELECT * FROM transactions WHERE id = ?", (tx_id,))
         transactions_row = cursor.fetchone()
         conn.close()
 
