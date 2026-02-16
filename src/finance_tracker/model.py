@@ -83,3 +83,12 @@ class Transaction:
 
     @classmethod
     def from_db_row(cls, row: dict) -> Transaction:
+        """Converts a database row to a Transaction object."""
+        return cls(
+            id=row['id'],
+            amount=row['amount'],
+            date=row['date'],
+            description= row.get('description', ''),
+            type=row['type'],
+            category=row.get('category', '')
+        )
