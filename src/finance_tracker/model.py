@@ -53,8 +53,8 @@ class Transaction:
         sign = "+" if self.is_income else "-"
         category = f"[{self.category}]" if self.category else ''
         return(
-                f"{self.date} {sign}{self.amount:,.2f}"
-                f"{self.description} {category}"
+                f"{self.date} {sign}{self.amount:,.2f} "
+                f"{self.description} {category} "
                 f"(id: {self.id if self.id is not None else 'New'})"
             )
 
@@ -92,3 +92,22 @@ class Transaction:
             type=row['type'],
             category=row.get('category', '')
         )
+
+if __name__ == '__main__':
+    t1 = Transaction.create_new(
+        amount=-20000,
+        date="2026-02-16",
+        description= 'salary payment',
+        type_='income',
+        category='work',
+    )
+    print(t1)
+    print(f"signed amount: {t1.signed_amount}")
+
+    t2 = Transaction.create_new(
+        amount= -100,
+        date="2026-02-16",
+        description= 'gift from enny',
+        category='gifts'
+    )
+    print(t2)

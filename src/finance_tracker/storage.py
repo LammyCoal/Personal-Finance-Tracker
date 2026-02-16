@@ -1,7 +1,9 @@
 from pathlib import Path
 from typing import List, Optional, Any, Dict
 import sqlite3
-from .model import Transaction
+from src.finance_tracker.model import Transaction
+
+
 DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "finance.db"
 
 class TransactionStorage:
@@ -38,7 +40,7 @@ class TransactionStorage:
 
         return new_id
 
-    def get_all_transactions(self) -> List[Transaction]: 
+    def get_all_transactions(self) -> List[Transaction]:
         """ Returns all transactions as a list of dictionary. """
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -92,13 +94,14 @@ if __name__ == "__main__":
 
 #Tests
     #Adding test
-transaction_id = storage.add_transaction(
-    amount=20000.0,
-    date="2026-02-03",
-    description="food",
-    type_="expense",
-    category="spendingszx"
+t1 = Transaction.create_new(
+    amount=10000,
+    date= "2026-02-16",
+    description="My january salary",
+    type_="income",
+    category="salary"
 )
+transaction_id = storage.add_transaction(t1)
 
 print(f"New Transaction with id {transaction_id} added ")
 
