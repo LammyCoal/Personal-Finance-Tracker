@@ -58,7 +58,7 @@ class TransactionStorage:
         transactions_row = cursor.fetchone()
         conn.close()
 
-        return dict(transactions_row) if transactions_row else None
+        return Transaction.from_db_row(dict(transactions_row)) if transactions_row else None
 
     def delete_transaction(self, tx_id: int) -> bool:
         """Deletes a transaction using its ID, returns True if deleted and False otherwise."""
