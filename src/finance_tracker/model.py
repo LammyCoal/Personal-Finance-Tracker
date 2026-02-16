@@ -9,6 +9,7 @@ class Transaction:
     id: Optional[int] = None
     amount: float = 0.0
     date: str = ""
+    description: str =""
     type: str = "expense"
     category: Optional[str] = None
 
@@ -33,36 +34,36 @@ class Transaction:
         except ValueError:
             raise ValueError("Invalid date!!, Must be a real calender date")
 
-        @property
-        def signed_amount(self) -> float:
-            """Returns positive for income and negative for expense"""
-            return self.amount if self.type == "income" else -self.amount
+    @property
+    def signed_amount(self) -> float:
+        """Returns positive for income and negative for expense"""
+        return self.amount if self.type == "income" else -self.amount
 
-        @property
-        def is_income(self) -> bool:
-            """Returns if the transaction is an income transaction"""
-            return self.type == "income"
+    @property
+    def is_income(self) -> bool:
+        """Returns if the transaction is an income transaction"""
+        return self.type == "income"
 
-        @property
-        def is_expense(self) -> bool:
-            """Returns if the transaction is an expense transaction"""
-            return self.type == "expense"
+    @property
+    def is_expense(self) -> bool:
+        """Returns if the transaction is an expense transaction"""
+        return self.type == "expense"
 
-        def __str__(self) -> str:
-            sign = "+" if self.is_income else "-"
-            category = f"[{self.category}]" if self.category else ''
-            return(
+    def __str__(self) -> str:
+        sign = "+" if self.is_income else "-"
+        category = f"[{self.category}]" if self.category else ''
+        return(
                 f"{self.date} {sign}{self.amount:,.2f}"
                 f"{self.description} {category}"
                 f"(id: {self.id if self.id is not None else 'New'})"
             )
 
-        def __repr__(self) -> str:
-            return f"Transaction(id={self.id}, amount={self.amount}, date='{self.date}', "\
-                    f"type='{self.type}', description='{self.description}' category={self.category})"
+    def __repr__(self) -> str:
+        return f"Transaction(id={self.id}, amount={self.amount}, date='{self.date}', "\
+                f"type='{self.type}', description='{self.description}' category={self.category})"
 
-        @classmethod
-        def create_new(
+    @classmethod
+    def create_new(
                 cls,
                 amount: float,
                 date: str,
@@ -76,8 +77,9 @@ class Transaction:
                 amount=abs(amount),
                 date=date.strip(),
                 description=description.strip(),
-                type_=type_.lower(),
+                type=type_.lower(),
                 category=category.strip() if category else None,
-                
-
             )
+
+    @classmethod
+    def from_db_row(cls, row: dict) -> Transaction:

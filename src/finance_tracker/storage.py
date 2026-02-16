@@ -53,7 +53,7 @@ class TransactionStorage:
         conn = self._get_connection()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM transactions WHERE id = ?", (tx_id,))
+        cursor.execute("SELECT * FROM transactions WHERE id = ?", (tx_id,x))
         transactions_row = cursor.fetchone()
         conn.close()
 
