@@ -62,11 +62,11 @@ def add(
 
 @app.command(name="list")
 def list_transactions(
-        reverse: bool = typer.Option(
-            False,
-            "--reverse",
-            "-r",
-            help="Shows the oldest transaction first.(default is newest first)",
+        oldest_first: bool = typer.Option(
+        False,
+        "--reverse",
+        "-r",
+        help="Shows the oldest transaction first.(default is newest first)",
         )
 ):
     """list all transactions in a beautiful table"""
@@ -77,12 +77,10 @@ def list_transactions(
         typer.echo("No transactions yet")
         return
 
-    if not reverse:
-        transactions = sorted(all_transaction, key=lambda t: t.date, reverse=True)
-
+    all_transaction = sorted(all_transaction, key=lambda t: t.date, reverse=not oldest_first)
 
     console = Console()
-    table = Table(title="Transactions", show_header=True, header_style="bold magenta")
+    table = Table(title="TRANSACTIONS", show_header=True, header_style="bold magenta")
     table.add_column("ID", style="cyan", no_wrap=True)
     table.add_column("Date")
     table.add_column("Type", style="blue")
@@ -90,7 +88,7 @@ def list_transactions(
     table.add_column("Description")
     table.add_column("Category", style="yellow")
 
-    for transaction in transactions:
+    for transaction in all_transaction:
         amount_in_str = f"{transaction.amount:,.2f}"
         amount_style = "green" if transaction.is_income else "red"
         table.add_row(
@@ -98,34 +96,34 @@ def list_transactions(
             transaction.date,
             transaction.type.upper(),
             amount_in_str,
-            transaction.description or "",
-            transaction.category or "",
+            transaction.description.capitalize() or "",
+            transaction.category.capitalize() or "",
             style= amount_style if transaction.is_income or transaction.is_expense else None,
         )
 
-        console.print(table)
-        typer.secho(f"Total Transaction: {len(all_transaction)}")
+    console.print(table)
+    typer.secho(f"Total Transaction: {len(all_transaction)}")
 
-    @app.command()
-    def balance():
+@app.command()
+def balance():
         """Shows current balance"""
         stor = TransactionStorage()
-        bal = storage.get_balance()
+        bal = stor.get_balance()
         colour = typer.colors.GREEN if bal > 0 else typer.colors.RED
-        typer.secho(f"Your current balance: {bal:,.2f}{colour}", fg=typer.colors.GREEN, bold=True)
+        typer.secho(f"Your current balance: {bal:,.2f}", fg=colour, bold=True)
 
-    @app.command()
-    def delete(
-            id: int = typer.Argument(..., help="Transaction ID to delete."),
+@app.command()
+def delete(
+            id_: int = typer.Argument(..., help="Transaction ID to delete."),
     ):
         """Deletes a transaction by ID"""
         sto = TransactionStorage()
-        if sto.delete_transaction(id):
+        if sto.delete_transaction(id_):
             typer.secho(f"Deleted transaction with id: {id}", fg=typer.colors.GREEN, bold=True)
         else:
             typer.secho(f"Failed: Transaction id not found!!!", fg=typer.colors.RED, bold=True , err=True)
             raise typer.Exit(code=1)
 
 
-    if __name__ == "__main__":
-        app()
+if __name__ == "__main__":
+    app()

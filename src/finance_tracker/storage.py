@@ -101,21 +101,3 @@ t1 = Transaction.create_new(
     type_="income",
     category="salary"
 )
-transaction_id = storage.add_transaction(t1)
-
-print(f"New Transaction with id {transaction_id} added ")
-
-    #Test getting all transactions
-transactions = storage.get_all_transactions()
-print("\n All transactions:")
-for transaction in transactions:
-    print(transaction)
-
-    #Test balance
-print(f"\n Current balance: {storage.get_balance()}")
-
-    #Test getting transactions by id
-transaction = storage.get_transactions_by_id(1)
-print(f"\n Transaction collected: {transaction} ")
-
-    #Test delete from storage
