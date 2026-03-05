@@ -104,3 +104,13 @@ def list_transactions(
 
         console.print(table)
         typer.secho(f"Total Transaction: {len(all_transaction)}")
+
+    @app.command():
+    def balance():
+        """Shows current balance"""
+        stor = TransactionStorage()
+        bal = storage.get_balance()
+        colour = typer.colors.GREEN if bal > 0 else typer.colors.RED
+        typer.secho(f"Your current balance: {bal:,.2f}{colour}", fg=typer.colors.GREEN, bold=True)
+
+    
