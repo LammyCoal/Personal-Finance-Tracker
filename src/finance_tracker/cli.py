@@ -59,3 +59,25 @@ def add(
     except ValueError as ve:
         typer.secho(f"Error: {ve}", fg=typer.colors.RED, bold=True, err=True)
         raise typer.Exit(code=1)
+
+@app.command(name="list")
+def list_transactions(
+        reverse: bool = typer.Option(
+            False,
+            "--reverse",
+            "-r",
+            help="Shows the oldest transaction first.(default is newest first)",
+        )
+):
+    """list all transactions in a beautiful table"""
+    storage = TransactionStorage()
+    all_transaction = storage.get_all_transactions()
+
+    if not all_transaction:
+        typer.echo("No transactions yet")
+        return
+
+    if not reverse:
+        transactions = sorted(all_transaction, key=lambda t: t.date, reverse=True)
+
+    console = Console() 
