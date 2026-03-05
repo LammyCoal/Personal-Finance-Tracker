@@ -80,4 +80,27 @@ def list_transactions(
     if not reverse:
         transactions = sorted(all_transaction, key=lambda t: t.date, reverse=True)
 
-    console = Console() 
+    console = Console()
+    table = Table(title="Transactions", show_header=True, header_style="bold magenta")
+    table.add_column("ID", style="cyan", no_wrap=True)
+    table.add_column("Date")
+    table.add_column("Type", style="blue")
+    table.add_column("Amount", justify="right",style="magenta")
+    table.add_column("Description")
+    table.add_column("Category", style="yellow")
+
+    for transaction in transactions:
+        amount_in_str = f"{transaction.amount:,.2f}"
+        amount_style = "green" if transaction.is_income else "red"
+        table.add_row(
+            str(transaction.id),
+            transaction.date,
+            transaction.type.upper(),
+            amount_in_str,
+            transaction.description or "",
+            transaction.category or "",
+            style= amount_style if transaction.is_income or transaction.is_expense else None,
+        )
+
+        console.print(table)
+        typer.secho(f"Total Transaction: {len(all_transaction)}")
