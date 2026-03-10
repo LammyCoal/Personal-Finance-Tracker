@@ -77,7 +77,7 @@ def list_transactions(
         typer.echo("No transactions yet")
         return
 
-    all_transaction = sorted(all_transaction, key=lambda t: t.date, reverse=not oldest_first)
+    all_transaction = sorted(all_transaction, key=lambda t: t.date, reverse=oldest_first)
 
     console = Console()
     table = Table(title="TRANSACTIONS", show_header=True, header_style="bold magenta")
@@ -119,7 +119,7 @@ def delete(
         """Deletes a transaction by ID"""
         sto = TransactionStorage()
         if sto.delete_transaction(id_):
-            typer.secho(f"Deleted transaction with id: {id}", fg=typer.colors.GREEN, bold=True)
+            typer.secho(f"Deleted transaction with id: {id_}", fg=typer.colors.GREEN, bold=True)
         else:
             typer.secho(f"Failed: Transaction id not found!!!", fg=typer.colors.RED, bold=True , err=True)
             raise typer.Exit(code=1)
