@@ -29,3 +29,12 @@ def storage(test_db_path: Path)->TransactionStorage:
 
     return storage
 
+@pytest.fixture
+def sample_transaction():
+    return Transaction.create_new(
+        amount=20000,
+        date= "2026-14-4",
+        description= "April salary",
+        type_ = "income",
+        category= "Salary"
+    )
