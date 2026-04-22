@@ -34,3 +34,9 @@ def test_transaction_properties():
     t2 = Transaction.create_new(amount=1000, date="2026-04-15", type_="expense")
     assert t2.is_expense is True
     assert t2.signed_amount == -1000
+
+def test_str_representation():
+    t1 = Transaction.create_new(amount=500, date="2026-04-15", type_="income", description="Test", category="Bonus")
+    assert "2026-04-15" in str(t1)
+    assert "Test" in str(t1)
+    assert "500" in str(t1)
