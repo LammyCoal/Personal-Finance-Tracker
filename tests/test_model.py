@@ -1,3 +1,5 @@
+from operator import truediv
+
 import pytest
 from src.finance_tracker.model import Transaction
 
@@ -23,3 +25,12 @@ def test_invalid_type():
 def test_invalid_date():
     with pytest.raises(ValueError, match="Invalid transaction date"):
         Transaction.create_new(amount=100, date="2026/04/15")
+
+def test_transaction_properties():
+    t1 = Transaction.create_new(amount=500, date="2026-04-15", type_="income")
+    assert t1.is_income is True
+    assert t1.signed_amount == 500
+
+    t2 = Transaction.create_new(amount=1000, date="2026-04-15", type_="expense")
+    assert t2.is_expense is True
+    assert t2.signed_amount == -1000
