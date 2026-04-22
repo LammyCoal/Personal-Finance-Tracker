@@ -16,3 +16,10 @@ def test_negative_amount():
     with pytest.raises(ValueError, match="Amount cannot be negative"):
         Transaction.create_new(amount=-1900, date="2026-04-15", type_= "expense")
 
+def test_invalid_type():
+    with pytest.raises(ValueError, match="Invalid transaction type"):
+        Transaction.create_new(amount=100, date="2026-04-15", type_="food supply")
+
+def test_invalid_date():
+    with pytest.raises(ValueError, match="Invalid transaction date"):
+        Transaction.create_new(amount=100, date="2026/04/15")
