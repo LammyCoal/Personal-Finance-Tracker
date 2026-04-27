@@ -1,6 +1,20 @@
 import pytest
 from src.finance_tracker.model import Transaction
 
+def test_create_transaction():
+    transaction = Transaction.create_new(
+        amount=100,
+        date="2026-04-27",
+        description="Foodstuffs",
+        type_="expense",
+        category="Food"
+    )
+    assert transaction.amount == 100
+    assert transaction.date == "2026-04-27"
+    assert transaction.description == "Foodstuffs"
+    assert transaction.is_expense == True
+    assert transaction.signed_amount == -100
+
 def test_negative_amount():
     with pytest.raises(ValueError, match="Amount cannot be negative"):
         Transaction.create_new(amount=-1900, date="2026-04-15", type_= "expense")
