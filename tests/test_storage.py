@@ -8,7 +8,7 @@ def test_add_and_get_all_transactions(storage,sample_transaction):
 
     retrieve_tx = storage.get_transactions_by_id(get_id)
     assert retrieve_tx is not None
-    assert retrieve_tx['amount'] == sample_transaction.amount
+    assert retrieve_tx.amount == sample_transaction.amount
     assert retrieve_tx['description'] == sample_transaction.description
     assert retrieve_tx['type'] == sample_transaction.type
 
