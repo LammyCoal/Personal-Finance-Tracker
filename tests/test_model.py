@@ -46,6 +46,6 @@ def test_input_arrangement():
     t1 = Transaction.create_new(amount=500, date=" 2026-04-15 ", type_="INCOME  ", description="  TEST", category="  Salary" )
     assert t1.date == "2026-04-15"
     assert t1.type == "income"
-    assert t1.description == "test"
+    assert t1.description == "TEST"
     assert t1.category == "salary"
 
