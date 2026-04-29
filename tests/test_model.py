@@ -24,7 +24,7 @@ def test_invalid_type():
         Transaction.create_new(amount=100, date="2026-04-15", type_="food supply")
 
 def test_invalid_date():
-    with pytest.raises(ValueError, match="Invalid transaction date"):
+    with pytest.raises(ValueError, match="Date must be in YYYY-MM-DD format"):
         Transaction.create_new(amount=100, date="2026/04/15")
 
 def test_transaction_properties():
