@@ -1,5 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass,field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 import re
@@ -77,7 +77,7 @@ class Transaction:
                 amount=amount,
                 date=date.strip(),
                 description=description.strip(),
-                type=type_.lower(),
+                type=type_.strip().lower(),
                 category=category.strip() if category else None,
             )
 
