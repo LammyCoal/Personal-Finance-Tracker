@@ -33,7 +33,7 @@ def storage(test_db_path: Path)->TransactionStorage:
 def sample_transaction():
     return Transaction.create_new(
         amount=20000,
-        date= "2026-14-4",
+        date= "2026-04-14",
         description= "April salary",
         type_ = "income",
         category= "Salary"
