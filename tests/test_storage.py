@@ -25,4 +25,12 @@ def test_delete_transactions(storage,sample_transaction):
 
     assert storage.delete_transaction(tx) is False
     assert storage.get_transactions_by_id(tx) is None
-    
+
+def test_balance(storage):
+    storage.add_transaction(Transaction.create_new(1000, "2026-04-29",type_="income"))
+    storage.add_transaction(Transaction.create_new(500, "2026-04-29",type_="expense"))
+    storage.add_transaction(Transaction.create_new(200, "2026-04-29",type_="expense"))
+
+    balance = storage.get_balance()
+    assert balance == 300
+
