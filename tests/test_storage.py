@@ -11,3 +11,11 @@ def test_add_and_get_all_transactions(storage,sample_transaction):
     assert retrieve_tx['amount'] == sample_transaction.amount
     assert retrieve_tx['description'] == sample_transaction.description
     assert retrieve_tx['type'] == sample_transaction.type
+
+def test_get_all_transactions(storage):
+    storage.add_transaction(Transaction.create_new(900, "2026-04-29",type_="income"))
+    storage.add_transaction(Transaction.create_new(900, "2026-04-29",type_="expense"))
+
+    all_txs = storage.get_all_transactions()
+    assert len(all_txs) == 2
+
