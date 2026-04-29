@@ -74,7 +74,7 @@ class Transaction:
             """Creates a new unsaved transaction mirroring the Transaction class"""
             return cls(
                 id=None,
-                amount=abs(amount),
+                amount=amount,
                 date=date.strip(),
                 description=description.strip(),
                 type=type_.lower(),
