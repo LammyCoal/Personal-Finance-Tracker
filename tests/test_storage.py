@@ -34,3 +34,6 @@ def test_balance(storage):
     balance = storage.get_balance()
     assert balance == 300
 
+def test_balance_without_tx(storage):
+    balance = storage.get_balance()
+    assert balance == 0
