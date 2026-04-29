@@ -19,3 +19,10 @@ def test_get_all_transactions(storage):
     all_txs = storage.get_all_transactions()
     assert len(all_txs) == 2
 
+def test_delete_transactions(storage,sample_transaction):
+    tx= storage.add_transaction(sample_transaction)
+    assert storage.delete_transaction(tx) is True
+
+    assert storage.delete_transaction(tx) is False
+    assert storage.get_transactions_by_id(tx) is None
+    
