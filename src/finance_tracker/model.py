@@ -31,7 +31,7 @@ class Transaction:
 
         try:
             datetime.strptime(self.date, "%Y-%m-%d")
-        except ValueError:
+        except ValueError:  
             raise ValueError("Invalid date!!, Must be a real calender date")
 
     @property
@@ -92,22 +92,3 @@ class Transaction:
             type=row['type'],
             category=row.get('category', '')
         )
-
-if __name__ == '__main__':
-    t1 = Transaction.create_new(
-        amount=-20000,
-        date="2026-02-16",
-        description= 'salary payment',
-        type_='income',
-        category='work',
-    )
-    print(t1)
-    print(f"signed amount: {t1.signed_amount}")
-
-    t2 = Transaction.create_new(
-        amount= -100,
-        date="2026-02-16",
-        description= 'gift from enny',
-        category='gifts'
-    )
-    print(t2)
