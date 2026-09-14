@@ -32,13 +32,13 @@ class TransactionStorage:
             transaction.description,
             transaction.type,
             transaction.category
-        ))
+        )) 
 
         conn.commit()
         new_id = cursor.lastrowid
         conn.close()
 
-        return new_id
+        return new_id 
 
     def get_all_transactions(self) -> List[Transaction]:
         """ Returns all transactions as a list of dictionary. """
@@ -88,16 +88,3 @@ class TransactionStorage:
         conn.close()
 
         return result["balance"] if result else 0.0
-
-if __name__ == "__main__":
-    storage = TransactionStorage()
-
-#Tests
-    #Adding test
-t1 = Transaction.create_new(
-    amount=10000,
-    date= "2026-02-16",
-    description="My january salary",
-    type_="income",
-    category="salary"
-)
