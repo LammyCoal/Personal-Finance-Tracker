@@ -41,7 +41,7 @@ class TransactionStorage:
         return new_id 
 
     def get_all_transactions(self) -> List[Transaction]:
-        """ Returns all transactions as a list of dictionary. """
+        """ Returns a list of all transactions. """
         conn = self._get_connection()
         cursor = conn.cursor()
 
