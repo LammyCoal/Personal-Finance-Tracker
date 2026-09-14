@@ -51,7 +51,7 @@ class TransactionStorage:
 
         return [Transaction.from_db_row(dict(row)) for row in transactions_rows]
 
-    def get_transactions_by_id(self, tx_id: int) -> Optional[Transaction]:
+    def get_transaction_by_id(self, tx_id: int) -> Optional[Transaction]:
         """ Returns a single transaction matching the given transaction ID or None if not found."""
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -74,7 +74,7 @@ class TransactionStorage:
 
         return if_deleted
 
-    def get_balance(self):
+    def get_balance(self) -> float:
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute("""
