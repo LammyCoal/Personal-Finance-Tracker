@@ -114,3 +114,16 @@ class TransactionStorage:
         conn.close()
 
         return updated
+
+    def get_transactions_by_type(self, type_: str) -> List[Transaction]:
+        """Returns a list of transactions filtered by type ('income' or 'expense')."""
+        if type_ not in ['income', 'expense']:
+            raise ValueError("Type must be either 'income' or 'expense'")
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM transactions WHERE type = ? ORDER BY date DESC", (type_,))
+        transactions_rows = cursor.fetchall()
+        conn.close()
+
+        return [Transaction.from_db_row(dict(row)) for row in transactions_rows]
