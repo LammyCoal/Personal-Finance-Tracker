@@ -88,3 +88,29 @@ class TransactionStorage:
         conn.close()
 
         return result["balance"] if result else 0.0
+
+    def update_transaction(self, transaction: Transaction) -> bool:
+        """Updates an existing transaction in the database. Returns True if updated, False otherwise."""
+        if transaction.id is None:
+            raise ValueError("Cannot update a transaction without an id")
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+        UPDATE transactions
+        SET amount = ?, date = ?, description = ?, type = ?, category = ?
+        WHERE id = ?
+        """, (
+            transaction.amount,
+            transaction.date,
+            transaction.description,
+            transaction.type,
+            transaction.category,
+            transaction.id
+        ))
+
+        updated = cursor.rowcount > 0
+        conn.commit()
+        conn.close()
+
+        return updated
