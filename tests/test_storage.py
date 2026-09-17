@@ -6,7 +6,7 @@ def test_add_and_get_all_transactions(storage,sample_transaction):
     assert get_id is not None
     assert get_id > 0
 
-    retrieve_tx = storage.get_transactions_by_id(get_id)
+    retrieve_tx = storage.get_transaction_by_id(get_id)
     assert retrieve_tx is not None
     assert retrieve_tx.amount == sample_transaction.amount
     assert retrieve_tx.description == sample_transaction.description
@@ -24,7 +24,7 @@ def test_delete_transactions(storage,sample_transaction):
     assert storage.delete_transaction(tx) is True
 
     assert storage.delete_transaction(tx) is False
-    assert storage.get_transactions_by_id(tx) is None
+    assert storage.get_transaction_by_id(tx) is None
 
 def test_balance(storage):
     storage.add_transaction(Transaction.create_new(1000, "2026-04-29",type_="income"))
