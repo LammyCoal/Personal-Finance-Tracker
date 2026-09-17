@@ -127,3 +127,16 @@ class TransactionStorage:
         conn.close()
 
         return [Transaction.from_db_row(dict(row)) for row in transactions_rows]
+
+    def get_transactions_by_category(self, category: str) -> List[Transaction]:
+        """Returns a list of transactions filtered by category."""
+        if not category or not category.strip():
+            raise ValueError("Category cannot be empty")
+        
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM transactions WHERE category = ? ORDER BY date DESC", (category.strip(),))
+        transactions_rows = cursor.fetchall()
+        conn.close()
+
+        return [Transaction.from_db_row(dict(row)) for row in transactions_rows]
