@@ -47,5 +47,4 @@ def test_input_arrangement():
     assert t1.date == "2026-04-15"
     assert t1.type == "income"
     assert t1.description == "TEST"
-    assert t1.category == "Salary"
-
+    assert t1.category == "Salary"  
