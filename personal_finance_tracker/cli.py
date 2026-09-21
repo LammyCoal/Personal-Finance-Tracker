@@ -67,17 +67,39 @@ def list_transactions(
         "--reverse",
         "-r",
         help="Shows the oldest transaction first.(default is newest first)",
-        )
-):
-    """list all transactions in a beautiful table"""
-    storage = TransactionStorage()
-    all_transaction = storage.get_all_transactions()
+        ),
 
-    if not all_transaction:
+        by_type: Optional[str] = typer.Option(
+            None,
+            "--type",
+            "-t",
+            help="Filter transactions by type: income or expense",
+        ),
+            
+        by_category: Optional[str] = typer.Option(
+            None,
+            "--category",
+            "-c",
+            help="Filter transactions by category",
+        ),
+):
+    """list  transactions in a beautiful table and also supports filtering"""
+    storage = TransactionStorage()
+    all_transactions = storage.get_all_transactions()
+    if by_type:
+        if by_type not in ["income", "expense"]:
+            typer.secho(f"Error: Invalid type filter: {by_type}. Must be 'income' or 'expense'.", fg=typer.colors.RED, bold=True, err=True)
+            raise typer.Exit(code=1)
+        all_transactions = [t for t in all_transactions if t.type == by_type]
+    if by_category:
+        all_transactions = [t for t in all_transactions if t.category == by_category]
+    
+
+    if not all_transactions:
         typer.echo("No transactions yet")
         return
 
-    all_transaction = sorted(all_transaction, key=lambda t: t.date, reverse=oldest_first)
+    tx = sorted(all_transactions, key=lambda t: t.date, reverse=not oldest_first)
 
     console = Console()
     table = Table(title="TRANSACTIONS", show_header=True, header_style="bold magenta")
@@ -88,8 +110,8 @@ def list_transactions(
     table.add_column("Description")
     table.add_column("Category", style="yellow")
 
-    for transaction in all_transaction:
-        amount_in_str = f"{transaction.amount:,.2f}"
+    for transaction in tx:
+        amount_in_str = f"{transaction.signed_amount:+,.2f}"
         amount_style = "green" if transaction.is_income else "red"
         table.add_row(
             str(transaction.id),
@@ -102,9 +124,9 @@ def list_transactions(
         )
 
     console.print(table)
-    typer.secho(f"Total Transaction: {len(all_transaction)}")
+    typer.secho(f"Total : {len(tx)} transaction(s)", dim=True)
 
-@app.command()
+@app.command()  
 def balance():
         """Shows current balance"""
         stor = TransactionStorage()
