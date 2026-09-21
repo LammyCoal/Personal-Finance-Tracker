@@ -83,4 +83,16 @@ def test_update_transaction_without_id(storage):
         assert False, "should return valueError"
     except ValueError:
         pass
+def test_get_transaction_by_type(storage):
+    storage.add_transaction(Transaction.create_new(1000, "2026-04-29",type_="income"))
+    storage.add_transaction(Transaction.create_new(500, "2026-04-29",type_="expense"))
+    storage.add_transaction(Transaction.create_new(200, "2026-04-29",type_="expense"))
+
+    income_txs = storage.get_transactions_by_type("income")
+    expense_txs = storage.get_transactions_by_type("expense")
+
+    assert len(income_txs) == 1
+    assert len(expense_txs) == 2
+    assert income_txs[0].type == "income"
+    assert all(tx.type == "expense" for tx in expense_txs)
 
