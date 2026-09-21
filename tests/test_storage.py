@@ -96,3 +96,15 @@ def test_get_transaction_by_type(storage):
     assert income_txs[0].type == "income"
     assert all(tx.type == "expense" for tx in expense_txs)
 
+def test_get_transaction_by_category(storage):
+    storage.add_transaction(Transaction.create_new(1000, "2026-04-29",type_="income", category="Salary"))
+    storage.add_transaction(Transaction.create_new(500, "2026-04-29",type_="expense", category="Food"))
+    storage.add_transaction(Transaction.create_new(200, "2026-04-29",type_="expense", category="Food"))
+
+    salary_txs = storage.get_transactions_by_category("Salary")
+    food_txs = storage.get_transactions_by_category("Food")
+
+    assert len(salary_txs) == 1
+    assert len(food_txs) == 2
+    assert salary_txs[0].category == "Salary"
+    assert all(tx.category == "Food" for tx in food_txs)
