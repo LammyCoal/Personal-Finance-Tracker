@@ -70,3 +70,17 @@ def test_update_transaction(storage,sample_transaction):
     assert retrieved_tx.type == "expense"
     assert retrieved_tx.description == "Updated income"
     assert retrieved_tx.category == "Allawee"
+
+def test_update_transaction_without_id(storage):
+    transaction = Transaction.create_new(
+        amount = 10000,
+        date = "2026-09-21",
+        type_ = "expense"
+    )
+
+    try:
+        storage.update_transaction(transaction)
+        assert False, "should return valueError"
+    except ValueError:
+        pass
+
