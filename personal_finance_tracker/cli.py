@@ -146,6 +146,38 @@ def delete(
             typer.secho(f"Failed: Transaction id not found!!!", fg=typer.colors.RED, bold=True , err=True)
             raise typer.Exit(code=1)
 
+@app.command()
+def update(
+        id_: int = typer.Argument(..., help="Transaction ID to update."),
+        amount: Optional[float] = typer.Option(None, help="New amount."),
+        date: Optional[str] = typer.Option(None, help="New date in YYYY-MM-DD format."),
+        description: Optional[str] = typer.Option(None, help="New description."),
+        type_: Optional[str] = typer.Option(None, help="New type: income or expense."),
+        category: Optional[str] = typer.Option(None, help="New category."),
+):
+    """Updates an existing transaction by ID"""
+    storage = TransactionStorage()
+    existing_tx = storage.get_transaction_by_id(id_)
+    if not existing_tx:
+        typer.secho(f"Error: Transaction with id {id_} not found.", fg=typer.colors.RED, bold=True, err=True)
+        raise typer.Exit(code=1)
+
+    # Create a new Transaction object with updated values
+    updated_tx = Transaction(
+        id=id_,
+        amount=amount if amount is not None else existing_tx.amount,
+        date=date if date is not None else existing_tx.date,
+        description=description if description is not None else existing_tx.description,
+        type=type_ if type_ is not None else existing_tx.type,
+        category=category if category is not None else existing_tx.category,
+    )
+
+    try:
+        storage.update_transaction(updated_tx)
+        typer.secho(f"✓ Successfully updated transaction with id: {id_}", fg=typer.colors.GREEN, bold=True)
+    except ValueError as ve:
+        typer.secho(f"Error: {ve}", fg=typer.colors.RED, bold=True, err=True)
+        raise typer.Exit(code=1)
 
 if __name__ == "__main__":
     app()
